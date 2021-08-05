@@ -14,6 +14,12 @@ Plug 'vim-airline/vim-airline-themes'
 " Rust
 Plug 'rust-lang/rust.vim'
 
+" C++
+Plug 'octol/vim-cpp-enhanced-highlight'
+
+" GLSL highlighting
+Plug 'tikhomirov/vim-glsl'
+
 " Tagbar
 Plug 'preservim/tagbar'
 
@@ -79,3 +85,5 @@ filetype plugin indent on
 set cinoptions+=L0
 
 set omnifunc=syntaxcomplete#Complete
+
+" C++
