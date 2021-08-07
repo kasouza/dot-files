@@ -2,7 +2,6 @@ call plug#begin('~/.vim/plugged')
 
 " NERD plugins
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
 
 " Emmet
 Plug 'mattn/emmet-vim'
@@ -31,6 +30,9 @@ Plug 'pangloss/vim-javascript'
 
 " Theme
 Plug 'morhetz/gruvbox'
+
+" LSP
+Plug 'neovim/nvim-lspconfig'
 
 call plug#end()
 
@@ -85,5 +87,22 @@ filetype plugin indent on
 set cinoptions+=L0
 
 set omnifunc=syntaxcomplete#Complete
+set completeopt-=preview
 
-" C++
+lua << EOF
+nvim_lsp = require('lspconfig')
+
+local on_attach = function(client, bufnr)
+	local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+	local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+	buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+end
+
+local servers = { 'clangd' }
+for _, lang in ipairs(servers) do
+	nvim_lsp[lang].setup{
+		on_attach = on_attach,
+	}
+end
+EOF
