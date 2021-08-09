@@ -62,9 +62,6 @@ autocmd FileType html,css EmmetInstall
 let g:NERDSpaceDelims = 1       " Add spaces after comment delimiters by default
 let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines
 
-" Binds <C-f> to opens nerdtree
-nnoremap <leader>f :NERDTree<CR>
-
 " Tagbar
 nmap <leader>t :TagbarToggle<CR>
 
