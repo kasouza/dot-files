@@ -1,28 +1,34 @@
 local nvim_lsp = require('lspconfig')
 local tiny_packager = require('tiny_packager');
 
-tiny_packager.add('morhetz/gruvbox')
+function install_plugins() tiny_packager.install_plugins() end
+vim.cmd('command! InstallPlugins :lua require\'tiny_packager\'.install_plugins()')
 
+-- <plugins>
 --LSP config
---Plug 'neovim/nvim-lspconfig'
+tiny_packager.add_plugin('neovim/nvim-lspconfig')
 
 -- NERD plugins
--- Plug 'scrooloose/nerdcommenter'
+tiny_packager.add_plugin('scrooloose/nerdcommenter')
 
 -- Vim arline
--- Plug 'bling/vim-airline'
--- Plug 'vim-airline/vim-airline-themes'
+tiny_packager.add_plugin('bling/vim-airline')
+tiny_packager.add_plugin('vim-airline/vim-airline-themes')
 
 -- C++
--- Plug 'octol/vim-cpp-enhanced-highlight'
+tiny_packager.add_plugin('octol/vim-cpp-enhanced-highlight')
 
 -- Theme
--- Plug 'morhetz/gruvbox'
+tiny_packager.add_plugin('morhetz/gruvbox')
+-- </plugins>
 
 
 -- Theme
--- vim.o.cursorline = true
+vim.o.cursorline = true
 vim.o.termguicolors = true
+vim.cmd('autocmd vimenter * ++nested colorscheme gruvbox')
+vim.cmd('let g:airline#extensions#tabline#enabled = 1')
+vim.g.gruvbox_contrast_dark='hard'
 
 -- Search
 vim.o.incsearch = true
@@ -35,6 +41,10 @@ vim.o.relativenumber = true
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.opt.cinoptions:append {'L0'}
+
+-- NERD Commenter
+vim.g.NERDSpaceDelims = 1
+vim.g.NERDCommentEmptyLines = 1
 
 -- Other
 vim.cmd('syntax enable')
@@ -75,12 +85,11 @@ local on_attach = function(client, bufnr)
 end
 
 local servers = { 'clangd' }
-
-for _, lsp in ipairs(servers) do
-	nvim_lsp[lsp].setup {
-		on_attach = on_attach,
-		flags = {
-			debounce_text_changes = 150
-		}
-	}
-end
+-- for _, lsp in ipairs(servers) do
+-- 	nvim_lsp[lsp].setup {
+-- 		on_attach = on_attach,
+-- 		flags = {
+-- 			debounce_text_changes = 150
+-- 		}
+-- 	}
+-- end
