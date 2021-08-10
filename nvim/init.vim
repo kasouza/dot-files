@@ -19,6 +19,9 @@ Plug 'rust-lang/rust.vim'
 " C++
 Plug 'octol/vim-cpp-enhanced-highlight'
 
+" GLSL highlighting
+Plug 'tikhomirov/vim-glsl'
+
 " Tagbar
 Plug 'preservim/tagbar'
 
@@ -30,6 +33,9 @@ Plug 'pangloss/vim-javascript'
 
 " Theme
 Plug 'morhetz/gruvbox'
+
+" LSP
+Plug 'neovim/nvim-lspconfig'
 
 call plug#end()
 
@@ -58,9 +64,6 @@ autocmd FileType html,css EmmetInstall
 " NERD Commenter Config 
 let g:NERDSpaceDelims = 1       " Add spaces after comment delimiters by default
 let g:NERDCommentEmptyLines = 1 " Allow commenting and inverting empty lines
-
-" Binds <C-f> to opens nerdtree
-nnoremap <leader>f :NERDTree<CR>
 
 " Tagbar
 nmap <leader>t :TagbarToggle<CR>
@@ -135,3 +138,22 @@ EOF
 set completeopt-=preview
 
 set omnifunc=syntaxcomplete#Complete
+set completeopt-=preview
+
+lua << EOF
+nvim_lsp = require('lspconfig')
+
+local on_attach = function(client, bufnr)
+	local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+	local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+	buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+end
+
+local servers = { 'clangd' }
+for _, lang in ipairs(servers) do
+	nvim_lsp[lang].setup{
+		on_attach = on_attach,
+	}
+end
+EOF
