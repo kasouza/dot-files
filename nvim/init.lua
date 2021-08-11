@@ -20,6 +20,7 @@ tiny_packager.add_plugin('octol/vim-cpp-enhanced-highlight')
 
 -- Theme
 tiny_packager.add_plugin('morhetz/gruvbox')
+
 -- </plugins>
 
 
@@ -94,3 +95,4 @@ for _, lsp in ipairs(servers) do
 		}
 	}
 end
+

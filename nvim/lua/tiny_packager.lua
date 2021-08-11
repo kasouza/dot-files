@@ -9,6 +9,19 @@ paths.start 	= paths.base .. '/start'
 paths.opt   	= paths.base .. '/opt'
 paths.ftplugin 	= paths.base .. '/ftplugin'
 
+--- Check if a git repo is acessible
+function check_repo(url)
+	local command = 'curl -o /dev/null -s -I -w "%{http_code}\n" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/' .. url
+	
+	local handle = io.popen(command)
+	local result = handle:read('*a')
+	handle:close()
+
+	result = result:gsub("%s+", "")
+
+	return result == 200
+end
+
 --- Check if a file or directory exists in this path
 function exists(file)
    local ok, err, code = os.rename(file, file)
@@ -59,9 +72,19 @@ function M.install_plugins()
 
 		local full_path = plugin.path .. '/' .. name
 		local is_installed,_ = isdir(full_path)
+		local is_repo_acessible = check_repo(plugin.url)
 
 		if (not is_installed) then
-			os.execute('git clone https://github.com/' .. plugin.url .. ' ' .. full_path)
+			if (not is_repo_acessible) then
+				print(vim.inspect('Could not install plugin: "' .. plugin.url .. '"'))
+
+			else
+				local command = 'git clone https://github.com/' .. plugin.url .. ' ' .. full_path
+				local handle = io.popen(command)
+				local result = handle:read('*a')
+
+				handle:close()
+			end
 		end
 	end
 end
