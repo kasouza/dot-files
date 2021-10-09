@@ -17,9 +17,9 @@ function check_repo(url)
 	local result = handle:read('*a')
 	handle:close()
 
-	result = result:gsub("%s+", "")
+	http_code = result:gsub("%s+", "")
 
-	return result == 200
+	return tonumber(http_code)
 end
 
 --- Check if a file or directory exists in this path
@@ -72,11 +72,12 @@ function M.install_plugins()
 
 		local full_path = plugin.path .. '/' .. name
 		local is_installed,_ = isdir(full_path)
-		local is_repo_acessible = check_repo(plugin.url)
 
 		if (not is_installed) then
-			if (not is_repo_acessible) then
-				print(vim.inspect('Could not install plugin: "' .. plugin.url .. '"'))
+			local http_code = check_repo(plugin.url)
+
+			if (http_code ~= 200) then
+				print(vim.inspect('Could not install plugin: "' .. plugin.url .. '": ' .. http_code))
 
 			else
 				local command = 'git clone https://github.com/' .. plugin.url .. ' ' .. full_path
