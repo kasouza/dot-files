@@ -72,9 +72,9 @@ function M.install_plugins()
 
 		local full_path = plugin.path .. '/' .. name
 		local is_installed,_ = isdir(full_path)
-		local is_repo_acessible = check_repo(plugin.url)
 
 		if (not is_installed) then
+			local is_repo_acessible = check_repo(plugin.url)
 			if (not is_repo_acessible) then
 				print(vim.inspect('Could not install plugin: "' .. plugin.url .. '"'))
 
