@@ -7,6 +7,7 @@ vim.cmd('command! InstallPlugins :lua require\'tiny_packager\'.install_plugins()
 -- <plugins>
 -- LSP config
 tiny_packager.add_plugin('neovim/nvim-lspconfig')
+tiny_packager.add_plugin('rust-lang/rust.vim')
 
 -- Nerd Commenter
 tiny_packager.add_plugin('preservim/nerdcommenter')
@@ -30,9 +31,16 @@ tiny_packager.add_plugin('mattn/emmet-vim')
 tiny_packager.add_plugin('pangloss/vim-javascript')
 tiny_packager.add_plugin('maxmellon/vim-jsx-pretty')
 
+-- Treesitter
+tiny_packager.add_plugin('nvim-treesitter/nvim-treesitter')
+
+-- Java
+tiny_packager.add_plugin('mfussenegger/nvim-jdtls')
+
+-- GLSL
+tiny_packager.add_plugin('tikhomirov/vim-glsl')
 
 -- </plugins>
-
 
 -- FZF
 vim.cmd("nnoremap <leader>f :FZF<CR>")
@@ -71,6 +79,9 @@ vim.cmd('filetype plugin indent on')
 vim.o.wrap = false
 vim.cmd('set omnifunc=syntaxcomplete#Complete')
 vim.opt.completeopt:remove { 'preview' }
+vim.opt.clipboard:append { 'unnamedplus' }
+vim.cmd('inoremap <ECS> <C-\\><C-n>')
+vim.cmd('inoremap jk <C-\\><C-n>')
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -104,7 +115,7 @@ local on_attach = function(client, bufnr)
 	buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
-local servers = { 'clangd', 'tsserver' }
+local servers = { 'rust_analyzer', 'clangd', 'tsserver' }
 for _, lsp in ipairs(servers) do
 	nvim_lsp[lsp].setup {
 		on_attach = on_attach,
@@ -114,3 +125,14 @@ for _, lsp in ipairs(servers) do
 	}
 end
 
+-- Treesitter
+require'nvim-treesitter.configs'.setup {
+	ensure_installed = "all",
+	sync_install = false,
+	highlight = {
+		enable = true,
+		additional_vim_regex_highlighting = false,
+	}
+}
+
+vim.cmd('nnoremap <leader>t :wincmd v<bar> :Ex <bar> :vertical resize 20<CR>')
