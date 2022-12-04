@@ -67,6 +67,9 @@ xinput set-prop "Elan Touchpad" "libinput Natural Scrolling Enabled" 1
 slstatus &
 ~/.fehbg &
 
+# Compositor
+picom &
+
 # Init dwm
  exec dwm
 
