@@ -42,7 +42,7 @@ function M.header_guards(user_name)
 	local endif = "#endif"
 
 	-- Put then in the file (with a empty line between the #define and #endif
-	vim.api.nvim_put({ifndef, define, '', endif}, 'l', true, true)
+	vim.api.nvim_put({ifndef, define, '', endif}, 'l', P, true)
 end
 
 return M
