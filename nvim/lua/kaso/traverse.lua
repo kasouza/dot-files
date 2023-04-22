@@ -1,10 +1,6 @@
-local M = {}
-M.config = {}
-
--- A pattern to which separators should be replaced by '_' in the final guard
-M.config.separators = '[%.\\/-]'
-M.config.user_name = 'USER_NAME'
-M.config.root_files = { '.git' }
+local root_files = {
+    '.git'
+}
 
 local function split(inputstr, sep)
     if sep == nil then
@@ -35,7 +31,7 @@ local function has_root_file(path)
         local files = set_from(split(handle:read("*a"), '\n'))
         handle:close()
 
-        for _, root_file in ipairs(M.config.root_files) do
+        for _, root_file in ipairs(root_files) do
             if files[root_file] ~= nil then
                 return true
             end
@@ -72,8 +68,24 @@ local function traverse(starting_path)
     return nil, visited
 end
 
-local function get_header_guard(user_name, inptpath, file_name)
-    local _, visited = traverse(inptpath)
+local function cwd()
+    local handle = io.popen('pwd')
+    if handle ~= nil then
+        local current_dir = handle:read('*a')
+        handle:close()
+
+        return current_dir
+    end
+
+    return nil
+end
+
+function get_header_guard(inptpath)
+    local path, visited = traverse(inptpath)
+    print(path)
+    for i, p in ipairs(visited) do
+        print(i .. ': ' .. p)
+    end
 
     local str = ''
     for i = 1, #visited do
@@ -81,23 +93,6 @@ local function get_header_guard(user_name, inptpath, file_name)
         str = "_" .. fname .. str
     end
 
-    str = user_name .. str .. '_' .. file_name
-    str = str:gsub(M.config.separators, '_'):upper()
-    return str
+    str = str:gsub('-', '_'):upper()
+    print('KASOUZA' .. str)
 end
-
-
--- Generate the header guards and output then into the current buffer
-function M.header_guards(user_name)
-    local guard = get_header_guard(user_name, vim.fn.expand('%:p:h'), vim.fn.expand("%"))
-
-    -- Create the actual header guards
-    local ifndef = "#ifndef " .. guard
-    local define = "#define " .. guard
-    local endif = "#endif"
-
-    -- Put then in the file (with a empty line between the #define and #endif
-    vim.api.nvim_put({ ifndef, define, '', endif }, 'l', P, true)
-end
-
-return M
