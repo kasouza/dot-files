@@ -32,5 +32,7 @@ vim.g.mapleader = " "
 
 vim.opt.clipboard = 'unnamedplus'
 
+-- Set emmet vim keybinding
+vim.g.user_emmet_expandabbr_key = '<c-l>'
 -- Stop automatic comment continuation on newline
-vim.cmd("autocmd BufEnter * set formatoptions-=cro")
+-- vim.cmd("autocmd BufEnter * set formatoptions-=cro")

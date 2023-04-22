@@ -49,4 +49,8 @@ return require('packer').startup(function(use)
 
     -- Bootstrap 4 snippets
     use 'jvanja/vim-bootstrap4-snippets'
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+    }
 end)

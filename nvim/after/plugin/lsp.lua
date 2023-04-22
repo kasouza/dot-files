@@ -2,6 +2,7 @@ local lsp = require('lsp-zero').preset({})
 
 lsp.ensure_installed({
     -- 'autopep8',
+    -- 'blade-formatter',
     'zls',
     'pyright',
     'html',
@@ -12,6 +13,7 @@ lsp.ensure_installed({
     'clangd',
     'intelephense',
     'tailwindcss',
+    'cmake',
 })
 
 local cmp = require('cmp')
@@ -39,7 +41,7 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
     vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
     vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-    vim.keymap.set("n", "<leader>vca", function() vim.lsp.buf.code_action() end, opts)
+    vim.keymap.set("n", "<leader>va", function() vim.lsp.buf.code_action() end, opts)
     vim.keymap.set("n", "<leader>vrr", function() vim.lsp.buf.references() end, opts)
     vim.keymap.set("n", "<leader>vrn", function() vim.lsp.buf.rename() end, opts)
     vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
@@ -54,10 +56,8 @@ vim.diagnostic.config({
     virtual_text = true
 })
 
---Enable (broadcasting) snippet capability for completion
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-require'lspconfig'.html.setup {
-  capabilities = capabilities,
+capabilities.offsetEncoding = 'utf-8'
+require('lspconfig').clangd.setup{
+    capabilities = capabilities
 }
