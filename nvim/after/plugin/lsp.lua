@@ -11,9 +11,11 @@ lsp.ensure_installed({
     'lua_ls',
     'rust_analyzer',
     'clangd',
-    'intelephense',
     'tailwindcss',
     'cmake',
+    'hls',
+    'denols',
+    'phpactor',
 })
 
 local cmp = require('cmp')

@@ -32,6 +32,8 @@ vim.g.mapleader = " "
 
 vim.opt.clipboard = 'unnamedplus'
 
+vim.cmd("autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
+
 -- Set emmet vim keybinding
 vim.g.user_emmet_expandabbr_key = '<c-l>'
 -- Stop automatic comment continuation on newline

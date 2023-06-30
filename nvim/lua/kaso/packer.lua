@@ -43,7 +43,6 @@ return require('packer').startup(function(use)
 }
     use 'jwalton512/vim-blade'
     use 'mattn/emmet-vim'
-    use 'github/copilot.vim'
     -- NerdCommenter
     use 'scrooloose/nerdcommenter'
 
@@ -53,4 +52,6 @@ return require('packer').startup(function(use)
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
+    -- Debugger adapter
+    use 'mfussenegger/nvim-dap'
 end)
