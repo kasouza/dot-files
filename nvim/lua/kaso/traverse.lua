@@ -96,3 +96,4 @@ function get_header_guard(inptpath)
     str = str:gsub('-', '_'):upper()
     print('KASOUZA' .. str)
 end
+
