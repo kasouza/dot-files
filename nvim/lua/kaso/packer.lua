@@ -1,5 +1,6 @@
 return require('packer').startup(function(use)
   use({ 'rose-pine/neovim', as = 'rose-pine' })
+  use 'mattn/emmet-vim'
 
   use 'mbbill/undotree'
 
