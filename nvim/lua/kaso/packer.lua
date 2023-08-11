@@ -1,4 +1,5 @@
 return require('packer').startup(function(use)
+  use 'jwalton512/vim-blade'
   use({ 'rose-pine/neovim', as = 'rose-pine' })
   use 'mattn/emmet-vim'
 
@@ -47,6 +48,5 @@ return require('packer').startup(function(use)
     }
   }
 
-  -- You can alias plugin names
-  use {'dracula/vim', as = 'dracula'}
+  use { 'preservim/nerdcommenter' }
 end)
