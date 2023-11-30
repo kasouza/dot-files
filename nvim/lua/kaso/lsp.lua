@@ -1,9 +1,17 @@
 local lspconfig = require('lspconfig')
+local util = require('lspconfig.util')
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+require'lspconfig'.elixirls.setup{
+    -- Unix
+    cmd = { "/home/kaso/.elixir-ls/release/language_server.sh" },
+    capabilities = capabilities,
+    root_dir = util.root_pattern('.git'),
+}
+
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
-local servers = { 'clangd', 'tsserver', 'intelephense', 'jdtls' }
+local servers = { 'pyright', 'clangd', 'tsserver', 'intelephense', 'jdtls' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     -- on_attach = my_custom_on_attach,
