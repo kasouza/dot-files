@@ -28,7 +28,7 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 
-vim.g.mapleader = " "
+vim.g.mapleader = "\\"
 
 vim.opt.clipboard = 'unnamedplus'
 
