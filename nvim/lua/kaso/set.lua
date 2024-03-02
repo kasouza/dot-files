@@ -1,10 +1,10 @@
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
 
 vim.opt.smartindent = true
 
@@ -12,7 +12,7 @@ vim.opt.wrap = false
 
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = (os.getenv("HOME") or "~" ).. "/.vim/undodir"
+vim.opt.undodir = (os.getenv("HOME") or "~") .. "/.vim/undodir"
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false
@@ -33,6 +33,7 @@ vim.g.mapleader = "\\"
 vim.opt.clipboard = 'unnamedplus'
 
 -- vim.cmd("autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
+vim.cmd('set expandtab')
 
 -- Set emmet vim keybinding
 vim.g.user_emmet_expandabbr_key = '<c-l>'
