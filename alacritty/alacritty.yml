@@ -65,7 +65,7 @@ window:
   dynamic_title: false
   title: Alacritty
 
-  decoration_theme_variant: dark
+  #decoration_theme_variant: dark
 
   # Window class (Linux/BSD only):
   class:
@@ -75,6 +75,6 @@ window:
     general: Alacritty
 
 font:
-  size: 11
+  size: 7
   normal:
     family: 'FiraCode Nerd Font Mono'

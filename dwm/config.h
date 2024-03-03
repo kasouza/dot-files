@@ -17,16 +17,16 @@ static const char *miccmd[] = {"amixer",  "-q",     "set",
 /* %video ALL=(ALL) NOPASSWD: /usr/bin/xbacklight */
 /* Remember to add your user to the "video" group, install the "light" cmd */
 /* and create a "bl_up" and a "bl_down" script */
-static const char *blupcmd[] = {"/home/kaso/scripts/bl_up", NULL};
-static const char *bldowncmd[] = {"/home/kaso/scripts/bl_down", NULL};
+static const char *blupcmd[] = {"light", "-A", "5", NULL};
+static const char *bldowncmd[] = {"light", "-U", "5", NULL};
 
 /* appearance */
 static const unsigned int borderpx = 2; /* border pixel of windows */
 static const unsigned int snap = 32;    /* snap pixel */
 static const int showbar = 1;           /* 0 means no bar */
 static const int topbar = 1;            /* 0 means bottom bar */
-static const char *fonts[] = {"monospace:size=10"};
-static const char dmenufont[] = "monospace:size=10";
+static const char *fonts[] = {"monospace:size=11"};
+static const char dmenufont[] = "monospace:size=11";
 static const char col_white[] = "#ffffff";
 static const char col_purple1[] = "#1a1c28";
 static const char col_purple2[] = "#282c47";
@@ -67,7 +67,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY, TAG)                                                      \
     {MODKEY, KEY, view, {.ui = 1 << TAG}},                                     \
         {MODKEY | ControlMask, KEY, toggleview, {.ui = 1 << TAG}},             \
@@ -96,8 +96,10 @@ static const Key keys[] = {
     {MODKEY, XK_b, togglebar, {0}},
     {MODKEY, XK_j, focusstack, {.i = +1}},
     {MODKEY, XK_k, focusstack, {.i = -1}},
+
     {MODKEY, XK_i, incnmaster, {.i = +1}},
     {MODKEY, XK_d, incnmaster, {.i = -1}},
+
     {MODKEY, XK_h, setmfact, {.f = -0.05}},
     {MODKEY, XK_l, setmfact, {.f = +0.05}},
     {MODKEY, XK_Return, zoom, {0}},
@@ -114,9 +116,20 @@ static const Key keys[] = {
     {MODKEY, XK_period, focusmon, {.i = +1}},
     {MODKEY | ShiftMask, XK_comma, tagmon, {.i = -1}},
     {MODKEY | ShiftMask, XK_period, tagmon, {.i = +1}},
-    TAGKEYS(XK_1, 0) TAGKEYS(XK_2, 1) TAGKEYS(XK_3, 2) TAGKEYS(XK_4, 3)
-        TAGKEYS(XK_5, 4) TAGKEYS(XK_6, 5) TAGKEYS(XK_7, 6) TAGKEYS(XK_8, 7)
-            TAGKEYS(XK_9, 8){MODKEY | ShiftMask, XK_q, try_quit, {0}},
+
+    TAGKEYS(XK_1, 0)
+    TAGKEYS(XK_2, 1)
+    TAGKEYS(XK_3, 2)
+    TAGKEYS(XK_4, 3)
+    TAGKEYS(XK_5, 4)
+    TAGKEYS(XK_6, 5)
+    TAGKEYS(XK_7, 6)
+    TAGKEYS(XK_8, 7)
+    TAGKEYS(XK_9, 8)
+
+    {MODKEY | ShiftMask, XK_q, quit, {0}},
+    //{MODKEY | ShiftMask, XK_q, try_quit, {0}},
+
     {0, XF86XK_AudioMute, spawn, {.v = mutecmd}},
     {0, XF86XK_AudioLowerVolume, spawn, {.v = voldowncmd}},
     {0, XF86XK_AudioRaiseVolume, spawn, {.v = volupcmd}},

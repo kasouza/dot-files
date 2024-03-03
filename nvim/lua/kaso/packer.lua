@@ -9,6 +9,8 @@ return require('packer').startup(function(use)
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
 
+    use 'fatih/vim-go'
+
     use 'elixir-editors/vim-elixir'
     use { 'neoclide/coc.nvim', branch = 'release' }
     use 'lervag/vimtex'
