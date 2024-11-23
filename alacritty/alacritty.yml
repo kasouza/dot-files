@@ -75,6 +75,6 @@ window:
     general: Alacritty
 
 font:
-  size: 7
+  size: 10
   normal:
     family: 'FiraCode Nerd Font Mono'

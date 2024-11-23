@@ -89,7 +89,8 @@ end
 
 -- Generate the header guards and output then into the current buffer
 function M.header_guards(user_name)
-    local guard = get_header_guard(user_name, vim.fn.expand('%:p:h'), vim.fn.expand("%"))
+    local filename = vim.fn.expand('%:t')
+    local guard = get_header_guard(user_name, vim.fn.expand('%:p:h'), filename)
 
     -- Create the actual header guards
     local ifndef = "#ifndef " .. guard

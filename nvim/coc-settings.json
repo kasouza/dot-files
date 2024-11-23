@@ -1,4 +1,6 @@
 {
     "elixir.pathToElixirLS": "~/.elixir-ls/release/language_server.sh",
-    "inlayHint.enable": false
+    "inlayHint.enable": false,
+    "java.import.gradle.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
+    "java.jdt.ls.java.home": "/home/kaso/.sdkman/candidates/java/21.0.2-open"
 }

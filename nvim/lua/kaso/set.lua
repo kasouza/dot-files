@@ -32,8 +32,9 @@ vim.g.mapleader = "\\"
 
 vim.opt.clipboard = 'unnamedplus'
 
--- vim.cmd("autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
-vim.cmd('set expandtab')
+vim.cmd('set shiftwidth=4 tabstop=4 softtabstop=4 expandtab')
+vim.cmd("autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
+vim.cmd("autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
 
 -- Set emmet vim keybinding
 vim.g.user_emmet_expandabbr_key = '<c-l>'

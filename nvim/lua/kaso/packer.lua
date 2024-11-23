@@ -1,13 +1,30 @@
 return require('packer').startup(function(use)
+    use 'mfussenegger/nvim-jdtls'
+
     -- use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
     -- use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
     -- use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
     -- use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
     -- use 'L3MON4D3/LuaSnip' -- Snippets plugin
+    use 'tikhomirov/vim-glsl'
+    use 'github/copilot.vim'
+    use 'prisma/vim-prisma'
+
     use {
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
+
+    use({
+        "kdheepak/lazygit.nvim",
+        -- optional for floating window border decoration
+        requires = {
+            "nvim-lua/plenary.nvim",
+        },
+    })
+
+    use 'nvim-tree/nvim-tree.lua'
+    use 'nvim-tree/nvim-web-devicons'
 
     use 'fatih/vim-go'
 
@@ -17,6 +34,8 @@ return require('packer').startup(function(use)
     use 'beanworks/vim-phpfmt'
     use 'jwalton512/vim-blade'
     use({ 'rose-pine/neovim', as = 'rose-pine' })
+    -- use { "ellisonleao/gruvbox.nvim" }
+
     use 'mattn/emmet-vim'
 
     use 'mbbill/undotree'
