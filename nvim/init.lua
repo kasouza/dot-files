@@ -52,7 +52,8 @@ vim.opt.updatetime = 50
 
 vim.cmd("autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
 vim.cmd("autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
-vim.cmd("autocmd BufEnter * set formatoptions-=cro")                                                                                                      -- Stop automatic comment continuation on newline
+vim.cmd("autocmd FileType prisma setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
+vim.cmd("autocmd BufEnter * set formatoptions-=cro") -- Stop automatic comment continuation on newline
 
 vim.cmd("filetype on")
 vim.cmd("filetype plugin on")
@@ -112,6 +113,64 @@ require("lazy").setup({
         'hrsh7th/cmp-nvim-lsp',
         'L3MON4D3/LuaSnip',
         'mfussenegger/nvim-dap',
+        'jwalton512/vim-blade',
+        {
+            "luckasRanarison/tailwind-tools.nvim",
+            name = "tailwind-tools",
+            build = ":UpdateRemotePlugins",
+            dependencies = {
+                "nvim-treesitter/nvim-treesitter",
+                "nvim-telescope/telescope.nvim", -- optional
+                "neovim/nvim-lspconfig",         -- optional
+            },
+            opts = {}                            -- your configuration
+        },
+        'mfussenegger/nvim-jdtls',
+        {
+            "zbirenbaum/copilot.lua",
+            cmd = "Copilot",
+            event = "InsertEnter",
+            config = function()
+                require("copilot").setup({})
+            end
+        },
+        {
+            "folke/trouble.nvim",
+            opts = {}, -- for default options, refer to the configuration section for custom setup.
+            cmd = "Trouble",
+            keys = {
+                {
+                    "<leader>xx",
+                    "<cmd>Trouble diagnostics toggle<cr>",
+                    desc = "Diagnostics (Trouble)",
+                },
+                {
+                    "<leader>xX",
+                    "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+                    desc = "Buffer Diagnostics (Trouble)",
+                },
+                {
+                    "<leader>cs",
+                    "<cmd>Trouble symbols toggle focus=false<cr>",
+                    desc = "Symbols (Trouble)",
+                },
+                {
+                    "<leader>cl",
+                    "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+                    desc = "LSP Definitions / references / ... (Trouble)",
+                },
+                {
+                    "<leader>xL",
+                    "<cmd>Trouble loclist toggle<cr>",
+                    desc = "Location List (Trouble)",
+                },
+                {
+                    "<leader>xQ",
+                    "<cmd>Trouble qflist toggle<cr>",
+                    desc = "Quickfix List (Trouble)",
+                },
+            },
+        }
     }
 })
 -- END plugins
@@ -224,12 +283,12 @@ require("dap").configurations.javascript = {
 -- Treesitter
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 parser_config.blade = {
-  install_info = {
-    url = "https://github.com/EmranMR/tree-sitter-blade",
-    files = {"src/parser.c"},
-    branch = "main",
-  },
-  filetype = "blade"
+    install_info = {
+        url = "https://github.com/EmranMR/tree-sitter-blade",
+        files = { "src/parser.c" },
+        branch = "main",
+    },
+    filetype = "blade"
 }
 
 vim.cmd([[
@@ -265,22 +324,39 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
         vim.keymap.set('n', '<space>f', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
         vim.keymap.set('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+        vim.keymap.set('n', 'L', '<cmd>lua vim.diagnostic.show()<cr>', opts)
     end,
 })
 
 -- You'll find a list of language servers here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 -- These are example language servers.
-require('lspconfig').ts_ls.setup({})
-require('lspconfig').lua_ls.setup({})
+require'lspconfig'.ts_ls.setup({})
+require'lspconfig'.lua_ls.setup({})
+require'lspconfig'.emmet_language_server.setup {}
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.cmake.setup{}
+require'lspconfig'.yamlls.setup{}
+require'lspconfig'.gopls.setup{}
 
 require('lspconfig').intelephense.setup({
     init_options = {
         licenceKey = "/home/kaso/.config/nvim/intelephense.key",
     },
+    settings = {
+
+        intelephense = {
+            environment = {
+                phpVersion = "5.6",
+            },
+        },
+    }
 })
 
+require'lspconfig'.prismals.setup{}
+
 require('lspconfig').clangd.setup({})
+require 'lspconfig'.jsonls.setup {}
 
 local cmp = require('cmp')
 
