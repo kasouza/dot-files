@@ -331,29 +331,33 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- You'll find a list of language servers here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 -- These are example language servers.
-require'lspconfig'.ts_ls.setup({})
-require'lspconfig'.lua_ls.setup({})
-require'lspconfig'.emmet_language_server.setup {}
-require'lspconfig'.pyright.setup{}
-require'lspconfig'.cmake.setup{}
-require'lspconfig'.yamlls.setup{}
-require'lspconfig'.gopls.setup{}
+require 'lspconfig'.ts_ls.setup({})
+require 'lspconfig'.lua_ls.setup({})
+require 'lspconfig'.emmet_language_server.setup {}
+require 'lspconfig'.pyright.setup {}
+require 'lspconfig'.cmake.setup {}
+require 'lspconfig'.yamlls.setup {}
+require 'lspconfig'.gopls.setup {}
 
-require('lspconfig').intelephense.setup({
-    init_options = {
-        licenceKey = "/home/kaso/.config/nvim/intelephense.key",
-    },
-    settings = {
-
-        intelephense = {
-            environment = {
-                phpVersion = "5.6",
-            },
+local function init_intelephense(version)
+    require('lspconfig').intelephense.setup({
+        init_options = {
+            licenceKey = "/home/kaso/.config/nvim/intelephense.key",
         },
-    }
-})
+        settings = {
 
-require'lspconfig'.prismals.setup{}
+            intelephense = {
+                environment = {
+                    phpVersion = version,
+                },
+            },
+        }
+    })
+end
+
+init_intelephense("5.6")
+
+require 'lspconfig'.prismals.setup {}
 
 require('lspconfig').clangd.setup({})
 require 'lspconfig'.jsonls.setup {}
@@ -376,3 +380,17 @@ cmp.setup({
     }),
 })
 -- END LSP
+
+-- START Custom cmds
+vim.api.nvim_create_user_command("PHPV", function(arg)
+    local buffer_clients = vim.lsp.buf_get_clients()
+    for _, client in ipairs(buffer_clients) do
+        if client.name == "intelephense" then
+            client.stop()
+            init_intelephense(arg.args)
+        end
+    end
+end, {
+    nargs = 1
+})
+-- END Custom cmds
