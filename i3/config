@@ -208,5 +208,5 @@ bar {
 default_border pixel 0
 default_floating_border pixel 0
 
-exec_always --no-startup-id feh --bg-scale ~/.config/backgrounds/background.jpg
+exec_always --no-startup-id feh --bg-fill ~/.config/backgrounds/bg_amorzinho.jpeg
 exec_always --no-startup-id picom

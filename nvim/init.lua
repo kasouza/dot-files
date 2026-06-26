@@ -50,6 +50,8 @@ vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 
+vim.cmd("autocmd FileType php,javascript,typescript,css lua vim.treesitter.start()")
+
 vim.cmd("autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
 vim.cmd("autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
 vim.cmd("autocmd FileType prisma setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab")
@@ -59,13 +61,9 @@ vim.cmd("filetype on")
 vim.cmd("filetype plugin on")
 -- END confis
 
-
-
 -- START remaps
 vim.cmd("nnoremap <silent> <leader>gg :LazyGit<CR>")
 -- END remaps
-
-
 
 -- START plugins
 require("lazy").setup({
@@ -82,9 +80,9 @@ require("lazy").setup({
         "mbbill/undotree",
         {
             "nvim-treesitter/nvim-treesitter",
-            config = function()
-                vim.cmd(":TSUpdate")
-            end,
+            lazy = false,
+            build = ":TSUpdate",
+            branch = 'main',
         },
 
         {
@@ -104,27 +102,27 @@ require("lazy").setup({
             end,
         },
 
-        {
-            'VonHeikemen/lsp-zero.nvim',
-            branch = 'v4.x',
-        },
+        --{
+            --'VonHeikemen/lsp-zero.nvim',
+            --branch = 'v4.x',
+        --},
 
         'hrsh7th/nvim-cmp',
         'hrsh7th/cmp-nvim-lsp',
         'L3MON4D3/LuaSnip',
         'mfussenegger/nvim-dap',
         'jwalton512/vim-blade',
-        {
-            "luckasRanarison/tailwind-tools.nvim",
-            name = "tailwind-tools",
-            build = ":UpdateRemotePlugins",
-            dependencies = {
-                "nvim-treesitter/nvim-treesitter",
-                "nvim-telescope/telescope.nvim", -- optional
-                "neovim/nvim-lspconfig",         -- optional
-            },
-            opts = {}                            -- your configuration
-        },
+        --{
+            --"luckasRanarison/tailwind-tools.nvim",
+            --name = "tailwind-tools",
+            --build = ":UpdateRemotePlugins",
+            --dependencies = {
+                --"nvim-treesitter/nvim-treesitter",
+                --"nvim-telescope/telescope.nvim", -- optional
+                --"neovim/nvim-lspconfig",         -- optional
+            --},
+            --opts = {}                            -- your configuration
+        --},
         'mfussenegger/nvim-jdtls',
         {
             "zbirenbaum/copilot.lua",
@@ -170,6 +168,50 @@ require("lazy").setup({
                     desc = "Quickfix List (Trouble)",
                 },
             },
+        },
+        {
+            "coder/claudecode.nvim",
+            dependencies = { "folke/snacks.nvim" },
+            config = true,
+            -- `cmd` lets lazy.nvim create command stubs that load the plugin on first use,
+            -- so `:ClaudeCode` and friends work on a fresh start. Without it, a keys-only
+            -- spec defers loading until a <leader>a* mapping is pressed and the commands
+            -- would not exist yet.
+            cmd = {
+                "ClaudeCode",
+                "ClaudeCodeFocus",
+                "ClaudeCodeSelectModel",
+                "ClaudeCodeAdd",
+                "ClaudeCodeSend",
+                "ClaudeCodeTreeAdd",
+                "ClaudeCodeStatus",
+                "ClaudeCodeStart",
+                "ClaudeCodeStop",
+                "ClaudeCodeOpen",
+                "ClaudeCodeClose",
+                "ClaudeCodeDiffAccept",
+                "ClaudeCodeDiffDeny",
+                "ClaudeCodeCloseAllDiffs",
+            },
+            keys = {
+                { "<leader>a",  nil,                              desc = "AI/Claude Code" },
+                { "<leader>ac", "<cmd>ClaudeCode<cr>",            desc = "Toggle Claude" },
+                { "<leader>af", "<cmd>ClaudeCodeFocus<cr>",       desc = "Focus Claude" },
+                { "<leader>ar", "<cmd>ClaudeCode --resume<cr>",   desc = "Resume Claude" },
+                { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
+                { "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Select Claude model" },
+                { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>",       desc = "Add current buffer" },
+                { "<leader>as", "<cmd>ClaudeCodeSend<cr>",        mode = "v",                  desc = "Send to Claude" },
+                {
+                    "<leader>as",
+                    "<cmd>ClaudeCodeTreeAdd<cr>",
+                    desc = "Add file",
+                    ft = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw", "snacks_picker_list" },
+                },
+                -- Diff management
+                { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+                { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>",   desc = "Deny diff" },
+            },
         }
     }
 })
@@ -206,26 +248,12 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
 vim.cmd("filetype plugin on")
 
-require('nvim-treesitter.configs').setup({
-    highlight = {
-        enable = true,
-    },
-    indent = {
-        enable = true,
-    },
-})
-
--- Treesitter
-require('nvim-treesitter.configs').setup({
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = true,
-    },
-    -- Needed because treesitter highlight turns off autoindent for php files
-    indent = {
-        enable = true,
-    },
-})
+-- TreeSitter
+require('nvim-treesitter').setup {
+  -- Directory to install parsers and queries to (prepended to `runtimepath` to have priority)
+  install_dir = vim.fn.stdpath('data') .. '/site'
+}
+require('nvim-treesitter').install { 'rust', 'javascript', 'zig', 'php' }
 
 -- UndoTree
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle)
@@ -280,32 +308,9 @@ require("dap").configurations.javascript = {
     },
 }
 
--- Treesitter
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.blade = {
-    install_info = {
-        url = "https://github.com/EmranMR/tree-sitter-blade",
-        files = { "src/parser.c" },
-        branch = "main",
-    },
-    filetype = "blade"
-}
-
-vim.cmd([[
-augroup BladeFiltypeRelated
-  au BufNewFile,BufRead *.blade.php set ft=blade
-augroup END
-]])
-
 -- END config-plugins
 
 -- START LSP
-local lspconfig_defaults = require('lspconfig').util.default_config
-lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-    'force',
-    lspconfig_defaults.capabilities,
-    require('cmp_nvim_lsp').default_capabilities()
-)
 
 -- This is where you enable features that only work
 -- if there is a language server active in the file
@@ -328,19 +333,36 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end,
 })
 
+require 'cmp'.setup {
+    sources = {
+        { name = 'nvim_lsp' }
+    }
+}
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+
 -- You'll find a list of language servers here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 -- These are example language servers.
-require 'lspconfig'.ts_ls.setup({})
-require 'lspconfig'.lua_ls.setup({})
-require 'lspconfig'.emmet_language_server.setup {}
-require 'lspconfig'.pyright.setup {}
-require 'lspconfig'.cmake.setup {}
-require 'lspconfig'.yamlls.setup {}
-require 'lspconfig'.gopls.setup {}
+vim.lsp.config('ts_ls', { capabilities = capabilities })
+vim.lsp.config('lua_ls', { capabilities = capabilities })
+vim.lsp.config('emmet_language_server',  { capabilities = capabilities })
+vim.lsp.config('pyright',  { capabilities = capabilities })
+vim.lsp.config('cmake',  { capabilities = capabilities })
+vim.lsp.config('yamlls',  { capabilities = capabilities })
+vim.lsp.config('gopls',  { capabilities = capabilities })
+--vim.lsp.config('prismals')
+vim.lsp.config('clangd', { capabilities = capabilities })
+vim.lsp.config('jsonls', { capabilities = capabilities })
+vim.lsp.config('ts_ls', { capabilities = capabilities })
+vim.lsp.config('somesass_ls', {
+    capabilities = capabilities,
+    filetypes = { "sass", "scss", "less", "css" },
+})
 
 local function init_intelephense(version)
-    require('lspconfig').intelephense.setup({
+    vim.lsp.enable("intelephense", {
         init_options = {
             licenceKey = "/home/kaso/.config/nvim/intelephense.key",
         },
@@ -355,12 +377,9 @@ local function init_intelephense(version)
     })
 end
 
+-- init_intelephense("8.3")
+-- init_intelephense("7.0")
 init_intelephense("5.6")
-
-require 'lspconfig'.prismals.setup {}
-
-require('lspconfig').clangd.setup({})
-require 'lspconfig'.jsonls.setup {}
 
 local cmp = require('cmp')
 
